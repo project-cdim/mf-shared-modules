@@ -1,0 +1,32 @@
+/*
+ * Copyright 2025 NEC Corporation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+import { MantineProvider } from '@mantine/core';
+import { render as testingLibraryRender } from '@testing-library/react';
+
+/**
+ * Renders a React component with the MantineProvider wrapper using Testing Library.
+ *
+ * @param ui - The React component to render.
+ * @returns The rendered component.
+ */
+export function render(ui: React.ReactNode) {
+  return testingLibraryRender(<>{ui}</>, {
+    wrapper: ({ children }: { children: React.ReactNode }) => (
+      <MantineProvider>{children}</MantineProvider>
+    ),
+  });
+}
