@@ -16,11 +16,7 @@
 
 import _ from 'lodash';
 
-import {
-  APIDeviceHealth,
-  APIDeviceState,
-  APIDeviceType,
-} from '@/shared-modules/types';
+import { APIDeviceHealth, APIDeviceState, APIDeviceType } from '@/shared-modules/types';
 
 /** Type definition for the response of GET /resource */
 export type APIresourceSummary = {
@@ -53,6 +49,7 @@ export type APIresource = APIresourceSummary & {
   annotation: {
     available: boolean;
   };
+  detected: boolean;
   nodeIDs: string[];
 };
 

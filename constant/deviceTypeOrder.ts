@@ -14,23 +14,14 @@
  * under the License.
  */
 
-import { APIDeviceType, APIProcessorType } from '../types';
-
 /** Sort order specification for device type */
-export const processorTypeOrder: APIProcessorType[] = [
-  'Accelerator',
-  'CPU',
-  'DSP',
-  'FPGA',
-  'GPU',
-  'UnknownProcessor',
-];
+export const processorTypeOrder = ['Accelerator', 'CPU', 'DSP', 'FPGA', 'GPU', 'UnknownProcessor'] as const;
 
-export const deviceTypeOrder: APIDeviceType[] = [
+export const deviceTypeOrder = [
   ...processorTypeOrder,
   'memory',
   'storage',
   'networkInterface',
   'graphicController',
   'virtualMedia',
-];
+] as const;

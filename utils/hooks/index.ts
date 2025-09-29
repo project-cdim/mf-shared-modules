@@ -27,3 +27,4 @@ export * from './useGraphViewPropsOfAll';
 export * from './useEnergyDonutChartData';
 export * from './useLayoutApplyNumbers';
 export * from './useIdFromQuery';
+export * from './useMetricDateRange';

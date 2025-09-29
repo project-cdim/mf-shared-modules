@@ -17,6 +17,7 @@
 import {
   formatByBinaryPrefix,
   formatBySiPrefix,
+  formatBytesValue,
   formatEnergyValue,
   formatNetworkTransferValue,
   formatNumberOfResources,
@@ -208,6 +209,31 @@ describe('formatBySiPrefix', () => {
 
   test('Should return an negative value when the value is negative number', () => {
     expect(formatBySiPrefix(-1000, 'k')).toBe('-1.00');
+  });
+});
+
+describe('formatBytesValue function', () => {
+  test('should format small bytes value correctly', () => {
+    const value = 512; // 512 bytes
+    const formattedValue = formatBytesValue(value);
+    expect(formattedValue).toBe('512 B');
+  });
+
+  test('should format bytes value correctly', () => {
+    const value = 1024; // 1 Kib
+    const formattedValue = formatBytesValue(value);
+    expect(formattedValue).toBe('1.00 KiB');
+  });
+
+  test('should format large bytes value correctly', () => {
+    const value = 1048576; // 1 Mib
+    const formattedValue = formatBytesValue(value);
+    expect(formattedValue).toBe('1.00 MiB');
+  });
+
+  test('should format undefined and null correctly', () => {
+    expect(formatBytesValue(undefined)).toBe('- B');
+    expect(formatBytesValue(null)).toBe('- B');
   });
 });
 

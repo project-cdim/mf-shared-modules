@@ -14,8 +14,11 @@
  * under the License.
  */
 
+/* istanbul ignore file */
+
 import { MantineProvider } from '@mantine/core';
 import { render as testingLibraryRender } from '@testing-library/react';
+import { useQueryArrayObject } from '@/shared-modules/utils/hooks';
 
 /**
  * Renders a React component with the MantineProvider wrapper using Testing Library.
@@ -25,8 +28,26 @@ import { render as testingLibraryRender } from '@testing-library/react';
  */
 export function render(ui: React.ReactNode) {
   return testingLibraryRender(<>{ui}</>, {
-    wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MantineProvider>{children}</MantineProvider>
-    ),
+    wrapper: ({ children }: { children: React.ReactNode }) => <MantineProvider>{children}</MantineProvider>,
   });
 }
+
+/**
+ * Mocks the useQueryArrayObject hook to return a specific property with a given value.
+ * Note that the useQueryArrayObject hook must be mocked in the test file before using this function.
+ *
+ * @param prop - The property to mock.
+ * @param returnValue - The value to return for the mocked property.
+ */
+export const mockQuery = (prop: string, returnValue: string[]) => {
+  (useQueryArrayObject as jest.Mock).mockReturnValue(
+    new Proxy({} as Record<string, string[]>, {
+      get: (_, p) => {
+        if (p === prop) {
+          return returnValue;
+        }
+        return [];
+      },
+    })
+  );
+};

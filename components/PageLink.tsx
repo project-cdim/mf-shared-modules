@@ -63,14 +63,16 @@ export const PageLink = ({ children, title, path, query, color, display, h }: Pa
     <Anchor
       title={title}
       onClick={() => {
-        const linkManager = luigiClient.linkManager();
-        query && linkManager.withParams(query as NodeParams);
-        linkManager.navigate(path);
+        navigate(luigiClient, path, query);
+      }}
+      onKeyDown={(event) => {
+        navigate(luigiClient, path, query, event);
       }}
       size='sm'
       c={color}
       display={display}
       h={h}
+      tabIndex={0}
       /** Used to disable dragging in react-grid-layout used in the tiles of the dashboard */
     >
       {children}
@@ -86,12 +88,29 @@ export const PageLink = ({ children, title, path, query, color, display, h }: Pa
         pathname: `${path.substring(path.indexOf('-') + 1)}`,
         query: query,
       }}
-      passHref
-      legacyBehavior
+      title={title}
+      style={{
+        display: display || 'inline',
+        color: color || 'inherit',
+        height: h || 'auto',
+      }}
+      tabIndex={0}
     >
-      <Anchor title={title} display={display} c={color} h={h}>
-        {children}
-      </Anchor>
+      {children}
     </Link>
   );
+};
+
+//  Navigate to the specified path
+const navigate = (
+  luigiClient: (typeof window)['LuigiClient'],
+  path: string,
+  query?: { [key: string]: string | string[] },
+  event?: React.KeyboardEvent<HTMLAnchorElement>
+) => {
+  if (!event || event.key === 'Enter') {
+    const linkManager = luigiClient.linkManager();
+    query && linkManager.withParams(query as NodeParams);
+    linkManager.navigate(path);
+  }
 };

@@ -14,25 +14,5 @@
  * under the License.
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
-
-import { Layout } from '@/shared-modules/components';
-
-const meta = {
-  title: 'Components/Layout',
-  component: Layout,
-  parameters: {
-    layout: 'fullscreen',
-  },
-  tags: ['autodocs'],
-} satisfies Meta<typeof Layout>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-/** Used in the app. Creates 24px padding around the content. */
-export const Standard: Story = {
-  args: {
-    children: 'ReactNode',
-  },
-};
+/** Type definition for detection */
+export type APIDeviceDetection = 'Detected' | 'Not Detected';

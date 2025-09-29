@@ -14,5 +14,7 @@
  * under the License.
  */
 
+import { availableOrder } from '@/shared-modules/constant';
+
 /** Type definition for design target specification */
-export type APIDeviceAvailable = 'Available' | 'Unavailable';
+export type APIDeviceAvailable = (typeof availableOrder)[number];

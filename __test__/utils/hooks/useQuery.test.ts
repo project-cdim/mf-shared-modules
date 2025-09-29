@@ -59,3 +59,42 @@ describe('useQuery', () => {
     expect(result.current).toEqual({ id: 'res101' });
   });
 });
+
+describe('useQueryArrayObject', () => {
+  test('splits comma-separated string into array', () => {
+    jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
+      query: { foo: 'a,b ,c' },
+      isReady: true,
+    });
+    const { result } = renderHook(() => require('@/shared-modules/utils/hooks/useQuery').useQueryArrayObject());
+    expect(result.current.foo).toEqual(['a', 'b ', 'c']);
+  });
+
+  test('handles array values and removes empty strings', () => {
+    jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
+      query: { foo: ['a', '', 'b,c'] },
+      isReady: true,
+    });
+    const { result } = renderHook(() => require('@/shared-modules/utils/hooks/useQuery').useQueryArrayObject());
+    expect(result.current.foo).toEqual(['a', 'b', 'c']);
+  });
+
+  test('returns empty array for undefined or empty', () => {
+    jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
+      query: { foo: undefined, bar: '' },
+      isReady: true,
+    });
+    const { result } = renderHook(() => require('@/shared-modules/utils/hooks/useQuery').useQueryArrayObject());
+    expect(result.current.foo).toEqual([]);
+    expect(result.current.bar).toEqual([]);
+  });
+
+  test('returns empty array for non-existent keys', () => {
+    jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
+      query: { foo: 'a,b,c' },
+      isReady: true,
+    });
+    const { result } = renderHook(() => require('@/shared-modules/utils/hooks/useQuery').useQueryArrayObject());
+    expect(result.current.nonExistent).toEqual([]);
+  });
+});

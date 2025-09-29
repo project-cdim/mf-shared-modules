@@ -14,10 +14,8 @@
  * under the License.
  */
 
-import { APIDeviceState } from '../types';
-
 /** State order specification */
-export const stateOrder: APIDeviceState[] = [
+export const stateOrder = [
   'Enabled',
   'Disabled',
   'StandbyOffline',
@@ -30,4 +28,4 @@ export const stateOrder: APIDeviceState[] = [
   'Quiesced',
   'Updating',
   'Qualified',
-];
+] as const;

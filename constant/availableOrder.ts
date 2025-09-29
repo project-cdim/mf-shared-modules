@@ -14,10 +14,5 @@
  * under the License.
  */
 
-import { APIDeviceAvailable } from '../types';
-
 /** Sort order specification for design target */
-export const availableOrder: APIDeviceAvailable[] = [
-  'Available',
-  'Unavailable',
-];
+export const availableOrder = ['Available', 'Unavailable'] as const;

@@ -28,6 +28,7 @@ export const useColorStyles = () => {
       backgroundColor: theme.colors.yellow[2],
     },
     blue: {
+      color: theme.colors.blue[6],
       backgroundColor: theme.colors.blue[1],
     },
     gray: {

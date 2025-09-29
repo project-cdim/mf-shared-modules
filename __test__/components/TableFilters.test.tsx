@@ -29,29 +29,12 @@ import {
 
 const TestInput = (props: { label: string; value: string }) => {
   const [val, setVal] = useState<string>(props.value);
-  return (
-    <TextInputForTableFilter
-      label={props.label}
-      value={val}
-      setValue={setVal}
-    />
-  );
+  return <TextInputForTableFilter label={props.label} value={val} setValue={setVal} />;
 };
 
-const TestMultiSelect = (props: {
-  label: string;
-  options: { value: string; label: string }[];
-  value: string[];
-}) => {
+const TestMultiSelect = (props: { label: string; options: { value: string; label: string }[]; value: string[] }) => {
   const [val, setVal] = useState<string[]>(props.value);
-  return (
-    <MultiSelectForTableFilter
-      label={props.label}
-      options={props.options}
-      value={val}
-      setValue={setVal}
-    />
-  );
+  return <MultiSelectForTableFilter label={props.label} options={props.options} value={val} setValue={setVal} />;
 };
 
 describe('TableFilters', () => {
@@ -135,6 +118,25 @@ describe('TableFilters', () => {
     expect(selected03).toHaveLength(1);
   });
 
+  test('NumberRange renders empty inputs when values are undefined', () => {
+    const setter = jest.fn();
+    const props = {
+      values: [undefined, undefined] as NumberRange,
+      setValues: setter,
+    };
+
+    render(<NumberRangeForTableFilter {...props} />);
+
+    const fromInput = screen.getByLabelText('From');
+    const toInput = screen.getByLabelText('To');
+
+    expect(fromInput).toHaveAttribute('placeholder', 'From');
+    expect(toInput).toHaveAttribute('placeholder', 'To');
+
+    expect(fromInput).toHaveValue('');
+    expect(toInput).toHaveValue('');
+  });
+
   test('NumberRange renders and respond user events correctly', async () => {
     const user = UserEvent.setup();
     const setter = jest.fn();
@@ -147,6 +149,9 @@ describe('TableFilters', () => {
 
     const fromInput = screen.getByLabelText('From');
     const toInput = screen.getByLabelText('To');
+
+    expect(fromInput).toHaveAttribute('placeholder', 'From');
+    expect(toInput).toHaveAttribute('placeholder', 'To');
 
     expect(fromInput).toBeVisible();
     expect(toInput).toBeVisible();
@@ -185,5 +190,33 @@ describe('TableFilters', () => {
     await user.type(toInput, 'hoge');
     expect(toInput).toHaveValue('');
     expect(fromInput).toHaveValue('');
+
+    await user.clear(fromInput);
+    await user.clear(toInput);
+
+    await user.type(fromInput, '000');
+    expect(fromInput).toHaveValue('000');
+    setter.mock.lastCall[0]([0, undefined]);
+
+    await user.type(toInput, '000');
+    expect(toInput).toHaveValue('000');
+    setter.mock.lastCall[0]([0, 0]);
+
+    await user.clear(fromInput);
+    await user.clear(toInput);
+    expect(fromInput).toHaveValue('');
+    expect(toInput).toHaveValue('');
+
+    // The value 9007199254740990 can be inputted because it is precisely equal to Number.MAX_SAFE_INTEGER - 1.
+    await user.clear(fromInput);
+    await user.type(fromInput, '9007199254740990');
+    expect(fromInput).toHaveValue('9007199254740990');
+    setter.mock.lastCall[0]([9007199254740990, undefined]);
+
+    // The value 9007199254740991 cannot be inputted because it exceeds Number.MAX_SAFE_INTEGER - 1.
+    await user.clear(fromInput);
+    await user.type(fromInput, '9007199254740991');
+    expect(fromInput).toHaveValue('900719925474099');
+    setter.mock.lastCall[0]([900719925474099, undefined]);
   });
 });

@@ -22,6 +22,7 @@ import useSWRImmutable from 'swr/immutable';
 import { deviceTypeOrder } from '@/shared-modules/constant/deviceTypeOrder';
 import { APIPromQL, APIPromQLMetrics } from '@/shared-modules/types';
 import { fetcherForPromql, getTargetMetrics } from '@/shared-modules/utils';
+// import { useMSW } from './useMSW';
 
 /** Formatting data for donut chart */
 export type donutChartDataType = {
@@ -32,19 +33,20 @@ export type donutChartDataType = {
 const ALL_DEVICE_TYPES = [...deviceTypeOrder];
 const baseString = `label_replace(sum(increase({__name__=~"<type>_metricEnergyJoules_reading",job=~".*"}[1h])),"data_label","<type>_energy","","")`;
 /** Acquisition query for total energy consumption by type (sum of differences) */
-const energyQuery = ALL_DEVICE_TYPES.map((type) =>
-  baseString.replace(/<type>/g, type)
-).join(' or ');
+const energyQuery = ALL_DEVICE_TYPES.map((type) => baseString.replace(/<type>/g, type)).join(' or ');
 /**
  * Custom hook to fetch and format data for an energy donut chart.
  * @returns An object containing the formatted donut chart data, any error that occurred during fetching, and the validation status.
  */
 export const useEnergyDonutChartData = () => {
   /** Get graph data (date range data) */
+  // const mswInitializing = useMSW();
+  const mswInitializing = false; // Do not use MSW
+
   const { data, error, isValidating } = useSWRImmutable<APIPromQL>(
     // If we add date range info into query here, the data continue to be fetched in same date range.
     // So we add date range info into query in fetcherForPromql.
-    `${process.env.NEXT_PUBLIC_URL_BE_PERFORMANCE_MANAGER}/query_range?query=${energyQuery}`,
+    !mswInitializing && `${process.env.NEXT_PUBLIC_URL_BE_PERFORMANCE_MANAGER}/query_range?query=${energyQuery}`,
     fetcherForPromql
   );
 
@@ -79,9 +81,7 @@ const sumTotalConsumptions = (metrics: APIPromQLMetrics): number => {
  * @param data - The APIPromQL data to parse.
  * @returns An array of donut chart data objects.
  */
-const parseEnergyDonutChartData = (
-  data: APIPromQL | undefined
-): donutChartDataType => {
+const parseEnergyDonutChartData = (data: APIPromQL | undefined): donutChartDataType => {
   return ALL_DEVICE_TYPES.map((type) => {
     const metrics = getTargetMetrics(data, `${type}_energy`);
     return {

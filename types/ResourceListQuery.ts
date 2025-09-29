@@ -14,20 +14,17 @@
  * under the License.
  */
 
-import {
-  APIDeviceAvailable,
-  APIDeviceHealth,
-  APIDeviceState,
-  APIDeviceType,
-} from '../types';
+import { APIDeviceAvailable, APIDeviceDetection, APIDeviceHealth, APIDeviceState, APIDeviceType } from '../types';
 
 export type ResourceListQuery = {
-  cxlSwitchId?: string[];
   type?: APIDeviceType[];
-  allocatednode?: string[];
-  allocatedCxl?: string[];
-  state?: APIDeviceState[];
   health?: APIDeviceHealth[];
-  resourceAvailable?: APIDeviceAvailable[];
+  state?: APIDeviceState[];
+  detection?: APIDeviceDetection[];
+  cxlSwitchId?: string[];
+  allocatedCxl?: string[];
   nodeId?: string[];
+  allocatednode?: string[];
+  resourceGroup?: string[];
+  resourceAvailable?: APIDeviceAvailable[];
 };

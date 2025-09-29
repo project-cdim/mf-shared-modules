@@ -101,6 +101,13 @@ export const valueToSiPrefix = (value: number): string => {
   return SI_PREFIX[unitIndex] || '';
 };
 
+export const formatBytesValue = (value: number | undefined | null): string => {
+  if (value === undefined || value === null) return '- B';
+  const binaryPrefix = valueToBinaryPrefix(value);
+  const valStr = formatByBinaryPrefix(value, binaryPrefix);
+  return binaryPrefix ? `${valStr} ${binaryPrefix}B` : `${valStr} B`;
+};
+
 export const formatEnergyValue = (value: number | undefined | null): string => {
   if (value === undefined || value === null) return '- Wh';
   const siPrefix = valueToSiPrefix(value);

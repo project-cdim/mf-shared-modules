@@ -1,3 +1,5 @@
+import { healthOrder } from '@/shared-modules/constant';
+
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,4 +17,4 @@
  */
 
 /** Type definition for health status */
-export type APIDeviceHealth = 'OK' | 'Warning' | 'Critical';
+export type APIDeviceHealth = (typeof healthOrder)[number];

@@ -33,4 +33,9 @@ describe('sortByDeviceType', () => {
     const result = sortByDeviceType(array);
     expect(result).toStrictEqual(['CPU', 'GPU']);
   });
+  test('Returns the array with non-default device type', () => {
+    const array = ['CPU', 'GPU', 'CPU', 'CPU', 'GPU', 'Not Default Type', 'Accelerator', 'Aaa'];
+    const result = sortByDeviceType(array);
+    expect(result).toStrictEqual(['Accelerator', 'CPU', 'GPU', 'Aaa', 'Not Default Type']);
+  });
 });

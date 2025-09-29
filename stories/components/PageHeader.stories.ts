@@ -19,12 +19,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PageHeader } from '@/shared-modules/components';
 
 const meta = {
-  title: 'Components/PageHeader',
+  title: 'Shared-Modules/components/PageHeader',
   component: PageHeader,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
   argTypes: {},
 } satisfies Meta<typeof PageHeader>;
 

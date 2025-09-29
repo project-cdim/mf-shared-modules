@@ -16,10 +16,12 @@
 
 import { AreaChart, AreaChartProps, ChartTooltip, LineChart } from '@mantine/charts';
 import { Divider, getThemeColor, Group, Space, Stack, Text, Title, useMantineTheme } from '@mantine/core';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { CardLoading, NoData, PageLink } from '@/shared-modules/components';
 import { APIProcessorType, ResourceListQuery } from '@/shared-modules/types';
+import { getStepFromRange } from '@/shared-modules/utils/graphParsers';
+import { useMetricDateRange } from '@/shared-modules/utils/hooks';
 
 import { CHART_COLORS } from '../constant';
 
@@ -75,6 +77,8 @@ export type GraphViewProps = {
   query?: ResourceListQuery | { tab: string };
   /** Loading state */
   loading?: boolean;
+  /** Date range for step calculation */
+  dateRange: [Date, Date];
 };
 
 /**
@@ -92,9 +96,11 @@ export const GraphView = (props: GraphViewProps) => {
 };
 
 export const GraphViewInner = (props: Exclude<GraphViewProps, 'loading'>) => {
-  const { title, data, valueFormatter, stack, linkTitle, link, query } = props;
+  const { title, data, valueFormatter, stack, linkTitle, link, query, dateRange } = props;
+  const t = useTranslations();
   const currentLanguage = useLocale();
   const theme = useMantineTheme();
+  const [metricStartDate, metricEndDate] = useMetricDateRange(dateRange);
 
   // Get keys other than date in an array
   const categories: GraphCategory[] =
@@ -102,8 +108,33 @@ export const GraphViewInner = (props: Exclude<GraphViewProps, 'loading'>) => {
 
   const isAreaChart = stack || categories.length === 1;
 
+  const getStepDisplayText = () => {
+    const step = getStepFromRange(metricStartDate, metricEndDate);
+    // Parse step string to extract value and unit
+    const match = step.match(/^(\d+)([smhd])$/);
+    if (!match) return t('Last 1 hour');
+
+    const value = parseInt(match[1]);
+    const unit = match[2];
+    const isPlural = value !== 1;
+
+    // Map units to translation keys with dynamic value replacement
+    switch (unit) {
+      case 'm':
+        return t(isPlural ? 'Last {value} minutes' : 'Last {value} minute', { value });
+      case 'h':
+        return t(isPlural ? 'Last {value} hours' : 'Last {value} hour', { value });
+      case 'd':
+        return t(isPlural ? 'Last {value} days' : 'Last {value} day', { value });
+      default:
+        return t('Last 1 hour');
+    }
+  };
+
   const getCurrentValue = () => {
     if (data === undefined || !isAreaChart || categories.length === 0) return <Space h='xl' />;
+    const isToday = dateRange[1].toDateString() === new Date().toDateString();
+    if (!isToday) return <Space h='xl' />;
 
     // If it is a stacked graph (unit J), calculate the sum of the latest values and display them
     const values = categories.reduce((sum: number | null, category) => {
@@ -115,10 +146,18 @@ export const GraphViewInner = (props: Exclude<GraphViewProps, 'loading'>) => {
       // Add if the string can be converted to a number
       return (sum ?? 0) + currentVal;
     }, null);
+
+    const stepDisplayText = getStepDisplayText();
+
     return (
-      <Text fz='1.875rem' fw={600}>
-        {valueFormatter(values)}
-      </Text>
+      <Group gap={8} align='end'>
+        <Text fz='xs' pb={5}>
+          {stepDisplayText}
+        </Text>
+        <Text fz='1.875rem' fw={600}>
+          {valueFormatter(values)}
+        </Text>
+      </Group>
     );
   };
 

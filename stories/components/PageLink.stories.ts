@@ -15,34 +15,26 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-
 import { PageLink } from '@/shared-modules/components';
 
 const meta = {
-  title: 'Components/PageLink',
+  title: 'Shared-Modules/components/PageLink',
   component: PageLink,
-  parameters: {
-    PageLink: 'centered',
+  args: {
+    children: 'Text',
+    path: './resource-detail',
   },
-  tags: ['autodocs'],
 } satisfies Meta<typeof PageLink>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Text link */
-export const Standard: Story = {
-  args: {
-    children: 'Text',
-    path: './resource-detail',
-  },
-};
+export const Standard: Story = {};
 
 /** Title is set (:hover to display) */
 export const WithTitle: Story = {
   args: {
-    children: 'Text',
     title: 'Title Text',
-    path: './resource-detail',
   },
 };

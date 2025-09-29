@@ -27,6 +27,7 @@ import {
   DataTableSortStatus,
 } from 'mantine-datatable';
 import { useTranslations } from 'next-intl';
+import { PAGE_SIZES } from '../constant';
 
 type CustomDataTableProps<T> = {
   /** Records. If you need to filter records with like table filters, this must have been filtered. */
@@ -63,7 +64,6 @@ export const CustomDataTable = <T,>({
   noPagination,
 }: CustomDataTableProps<T>) => {
   const FIRST_PAGE = 1;
-  const PAGE_SIZES = [10, 25, 50, 100];
 
   const t = useTranslations();
 

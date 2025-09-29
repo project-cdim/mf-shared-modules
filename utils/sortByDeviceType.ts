@@ -15,14 +15,16 @@
  */
 
 import { deviceTypeOrder } from '@/shared-modules/constant';
-import { APIDeviceType } from '@/shared-modules/types';
 
 /** Sort the array of device types in the default order by removing duplicates
  * @param array Array to be sorted
  * @returns Array that has been sorted
  */
-export const sortByDeviceType = (array: APIDeviceType[]): APIDeviceType[] => {
-  const uniqueArray = Array.from(new Set(array));
+export const sortByDeviceType = (array: string[]): string[] => {
+  const uniqueArray = Array.from(new Set(array)).toSorted();
 
-  return deviceTypeOrder.filter((item) => uniqueArray.includes(item));
+  return [
+    ...deviceTypeOrder.filter((item) => uniqueArray.includes(item)),
+    ...uniqueArray.filter((item) => !(deviceTypeOrder as unknown as string[]).includes(item)),
+  ];
 };

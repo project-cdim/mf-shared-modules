@@ -136,6 +136,7 @@ const resData: APInodes = {
             type: 'CPU',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -151,6 +152,7 @@ const resData: APInodes = {
             type: 'memory',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -166,6 +168,7 @@ const resData: APInodes = {
             type: 'virtualMedia',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
       ],
@@ -187,6 +190,7 @@ const resData: APInodes = {
             type: 'CPU',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -202,6 +206,7 @@ const resData: APInodes = {
             type: 'memory',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -217,6 +222,7 @@ const resData: APInodes = {
             type: 'storage',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -232,6 +238,7 @@ const resData: APInodes = {
             type: 'networkInterface',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -247,6 +254,7 @@ const resData: APInodes = {
             type: 'virtualMedia',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
       ],
@@ -268,6 +276,7 @@ const resData: APInodes = {
             type: 'CPU',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -283,6 +292,7 @@ const resData: APInodes = {
             type: 'memory',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
         {
@@ -298,6 +308,7 @@ const resData: APInodes = {
             type: 'storage',
             deviceSwitchInfo: 'CXL001',
           },
+          detected: true,
           resourceGroupIDs: [],
         },
       ],

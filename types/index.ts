@@ -15,17 +15,18 @@
  */
 
 export * from './APIDeviceAvailable';
+export * from './APIDeviceDetection';
 export * from './APIDeviceHealth';
 export * from './APIDeviceState';
 export * from './APIDeviceType';
-export * from './APIresources';
+export * from './APILayoutApplyList';
 export * from './APInodes';
 export * from './APIPromQL';
-export * from './APPStatus';
-export * from './ResourceListQuery';
-export * from './APILayoutApplyList';
+export * from './APIresources';
 export * from './APPLayoutApplyList';
+export * from './APPStatus';
 export * from './LayoutApplyListQuery';
+export * from './ResourceListQuery';
 
 /** The DatePicker of mantine sets null when cleared */
 export type DateRange = [Date | undefined | null, Date | undefined | null];

@@ -31,7 +31,7 @@ describe('DatetimeString', () => {
     (useLocale as unknown as jest.Mock).mockReturnValue('ja');
 
     const date = new Date('2023-05-10T10:20:30Z');
-    render(DatetimeString(date));
+    render(<DatetimeString date={date} />);
 
     expect(screen.getByText('2023/5/10 10:20:30')).toBeInTheDocument();
   });
@@ -40,7 +40,7 @@ describe('DatetimeString', () => {
     (useLocale as unknown as jest.Mock).mockReturnValue('en');
 
     const date = new Date('2023-05-10T10:20:30Z');
-    render(DatetimeString(date));
+    render(<DatetimeString date={date} />);
 
     expect(screen.getByText('5/10/2023, 10:20:30 AM')).toBeInTheDocument();
   });
@@ -48,7 +48,7 @@ describe('DatetimeString', () => {
   test('Should display nothing when date is undefined', () => {
     (useLocale as unknown as jest.Mock).mockReturnValue('ja');
 
-    render(DatetimeString(undefined));
+    render(<DatetimeString />);
 
     expect(screen.queryByText('2023/5/10 10:20:30')).not.toBeInTheDocument();
   });

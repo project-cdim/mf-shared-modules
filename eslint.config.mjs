@@ -47,6 +47,7 @@ export default [
       sourceType: 'script',
       parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: './',
       },
     },
   },

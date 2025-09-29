@@ -205,5 +205,6 @@ const applyResults: APIApplyIDGetResponse[] = [
 
 const dummyAPILayoutApplyList: APILayoutApplyList = {
   count: 12,
+  totalCount: 20,
   applyResults: applyResults,
 };

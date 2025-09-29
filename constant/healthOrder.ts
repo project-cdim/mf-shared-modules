@@ -14,7 +14,5 @@
  * under the License.
  */
 
-import { APIDeviceHealth } from '../types';
-
 /** Health order specification */
-export const healthOrder: APIDeviceHealth[] = ['OK', 'Warning', 'Critical'];
+export const healthOrder = ['OK', 'Warning', 'Critical'] as const;

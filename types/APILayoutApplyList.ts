@@ -102,7 +102,7 @@ export type APIApplyResult = {
 export type ApplyProcedureStatusLabelJa = '失敗' | '完了' | 'キャンセル' | 'スキップ';
 export type ApplyProcedureStatusLabelKey = 'Failed' | 'Completed' | 'Canceled.normal' | 'Skipped';
 
-type APIProcedure = {
+export type APIProcedure = {
   operationID: number;
   operation: ProcedureOperation;
   targetCPUID?: string;

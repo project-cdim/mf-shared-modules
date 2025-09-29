@@ -1,3 +1,5 @@
+import { processorTypeOrder, deviceTypeOrder } from '@/shared-modules/constant';
+
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,22 +17,10 @@
  */
 
 /** Processor type definition */
-export type APIProcessorType =
-  | 'Accelerator'
-  | 'CPU'
-  | 'DSP'
-  | 'FPGA'
-  | 'GPU'
-  | 'UnknownProcessor';
+export type APIProcessorType = (typeof processorTypeOrder)[number];
 
 /** Type definition for device type */
-export type APIDeviceType =
-  | APIProcessorType
-  | 'memory'
-  | 'storage'
-  | 'networkInterface'
-  | 'graphicController'
-  | 'virtualMedia';
+export type APIDeviceType = (typeof deviceTypeOrder)[number];
 
 /**
  * Checks if the provided argument is a valid APIDeviceType.
@@ -38,18 +28,6 @@ export type APIDeviceType =
  * @returns True if the argument is a valid APIDeviceType, false otherwise.
  */
 export const isAPIDeviceType = (arg: unknown): arg is APIDeviceType => {
-  const types = new Set([
-    'Accelerator',
-    'CPU',
-    'DSP',
-    'FPGA',
-    'GPU',
-    'memory',
-    'storage',
-    'networkInterface',
-    'graphicController',
-    'virtualMedia',
-    'UnknownProcessor',
-  ]);
-  return types.has(arg as string);
+  const types = new Set<APIDeviceType>(deviceTypeOrder);
+  return types.has(arg as APIDeviceType);
 };

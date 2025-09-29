@@ -15,6 +15,7 @@
  */
 
 export * from './bytesToUnit';
+export * from './createPromQLParams';
 export * from './fetcher';
 export * from './fetcherForPromql';
 export * from './formatters';

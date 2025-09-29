@@ -16,14 +16,28 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useState } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 import useSWRImmutable from 'swr/immutable';
 
 import { GraphViewProps } from '@/shared-modules/components';
 import { APIDeviceType, APIPromQL } from '@/shared-modules/types';
-import { fetcherForPromql, formatEnergyValue, parseGraphData } from '@/shared-modules/utils';
+import { fetcherForPromqlByPost, formatEnergyValue, parseGraphData, createPromQLParams } from '@/shared-modules/utils';
+import { useMetricDateRange } from './useMetricDateRange';
+// import { useMSW } from './useMSW';
+
+/**
+ * Get date range for one month ago to current time
+ * @returns [Date, Date] - [oneMonthAgo, today]
+ */
+const getOneMonthDateRange = (): [Date, Date] => {
+  const today = new Date();
+  const oneMonthAgo = new Date(today);
+  oneMonthAgo.setMonth(today.getMonth() - 1);
+  oneMonthAgo.setMinutes(0, 0, 0);
+  return [oneMonthAgo, today];
+};
 
 /**
  * Custom hook for retrieving energy area chart data.
@@ -34,31 +48,49 @@ export const useGraphViewPropsOfAll = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   period: 'day' | 'week' | 'month' | 'year' // TODO: implement period
 ) => {
+  // const mswInitializing = useMSW();
+  const mswInitializing = false; // Do not use MSW
+
   const t = useTranslations();
   const locale = useLocale();
+
+  const [dateRange, setDateRange] = useState<[Date, Date]>(getOneMonthDateRange);
+  const [metricStartDate, metricEndDate] = useMetricDateRange(dateRange);
+
+  // Calculate step using getStepFromRange for consistency
+  // const step = getStepFromRange(metricStartDate, metricEndDate);
+  const step = '1h';
+
   // Total energy consumption of all device types (sum of differences) acquisition query
-  const ALL_ENERGY_QUERY = `label_replace(sum(increase({__name__=~".*_metricEnergyJoules_reading",job=~".*"}[1h])/3600),"data_label","${deviceType}_energy","","")`;
+  const ALL_ENERGY_QUERY = `label_replace(sum(increase({__name__=~".*_metricEnergyJoules_reading",job=~".*"}[${step}])/3600),"data_label","${deviceType}_energy","","")`;
+
+  // Create SWR key that excludes metricStartDate and metricEndDate to prevent infinite loops
+  // istanbul ignore next
+  const swrKey = !mswInitializing
+    ? [`${process.env.NEXT_PUBLIC_URL_BE_PERFORMANCE_MANAGER}/query_range`, ALL_ENERGY_QUERY, step]
+    : null;
 
   // Get graph data (date range data)
-  const { data, error, isValidating } = useSWRImmutable<APIPromQL & { url?: string }>(
-    // If we add date range info into query here, the data continue to be fetched in same date range.
-    // So we add date range info into query in fetcherForPromql.
-    `${process.env.NEXT_PUBLIC_URL_BE_PERFORMANCE_MANAGER}/query_range?query=${ALL_ENERGY_QUERY}`,
-    fetcherForPromql
-  );
+  const { data, error, isValidating } = useSWRImmutable<APIPromQL>(swrKey, ([url]: [string, string, string]) => {
+    // Calculate fresh date range for each fetch
+    const [oneMonthAgo, today] = getOneMonthDateRange();
 
-  // Extract the acquisition target date and time range from the request URL
-  const [startDate, endDate] = useMemo(() => {
-    return getDateRangeFromQuery(data?.url);
-  }, [data]);
+    // Update state for UI display
+    setDateRange([oneMonthAgo, today]);
+
+    // Use fresh dates for the API call
+    const params = createPromQLParams(ALL_ENERGY_QUERY, oneMonthAgo.toISOString(), today.toISOString(), step);
+    return fetcherForPromqlByPost(url, params);
+  });
 
   const areaChartProps: GraphViewProps = {
     title: t('Energy Consumptions'),
-    data: parseGraphData(data, `${deviceType}_energy`, locale, startDate, endDate),
+    data: parseGraphData(data, `${deviceType}_energy`, locale, metricStartDate, metricEndDate),
     valueFormatter: formatEnergyValue,
     linkTitle: t('Summary'),
     link: '/cdim/res-summary',
     query: { tab: deviceType },
+    dateRange: dateRange,
   };
 
   return {
@@ -66,19 +98,4 @@ export const useGraphViewPropsOfAll = (
     areaChartError: error,
     areaChartValidating: isValidating,
   };
-};
-
-/**
- * Extracts the start and end date values from the given URL query string.
- *
- * @param url - The URL query string.
- * @returns An array containing the start and end date values.
- */
-const getDateRangeFromQuery = (url: string | undefined): [string | undefined, string | undefined] => {
-  if (!url) return [undefined, undefined];
-
-  const params = new URLSearchParams(url);
-  const start = params.get('start') ?? undefined;
-  const end = params.get('end') ?? undefined;
-  return [start, end];
 };

@@ -16,35 +16,22 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ReloadHeader } from '@/shared-modules/components';
+import { Layout } from '@/shared-modules/components';
 
 const meta = {
-  title: 'Components/ReloadHeader',
-  component: ReloadHeader,
+  title: 'Shared-Modules/components/Layout',
+  component: Layout,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
-  tags: ['autodocs'],
-  argTypes: {},
-} satisfies Meta<typeof ReloadHeader>;
+} satisfies Meta<typeof Layout>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Used in the app. Creates 24px padding around the content. */
 export const Standard: Story = {
   args: {
-    mutate: () => {
-      console.log('Mutate.');
-    },
-    loading: false,
-  },
-};
-
-export const EmptyMutate: Story = {
-  args: {
-    mutate: () => {
-      alert('mutate()');
-    },
-    loading: false,
+    children: 'ReactNode',
   },
 };

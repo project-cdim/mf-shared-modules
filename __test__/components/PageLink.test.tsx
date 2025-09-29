@@ -83,4 +83,22 @@ describe('PageLink Component', () => {
     expect(mockWithParams).not.toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/test');
   });
+
+  test('should call linkManager with correct parameters on Enter key press', async () => {
+    render(
+      <PageLink path='/test' query={{ param1: 'value1' }}>
+        Click me!
+      </PageLink>
+    );
+    act(() => {
+      // Call luigiClient.addInitListener
+      mockAddInitListener.mock.calls[0][0]();
+    });
+
+    await UserEvent.type(screen.getByText('Click me!'), '{enter}');
+
+    expect(LuigiClient.linkManager).toHaveBeenCalled();
+    expect(mockWithParams).toHaveBeenCalledWith({ param1: 'value1' });
+    expect(mockNavigate).toHaveBeenCalledWith('/test');
+  });
 });

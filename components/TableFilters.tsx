@@ -16,8 +16,9 @@
 
 import { Dispatch, SetStateAction } from 'react';
 
-import { ActionIcon, ComboboxData, Group, MultiSelect, NumberInput, TextInput } from '@mantine/core';
+import { ActionIcon, ComboboxData, Group, MultiSelect, NumberInput, NumberInputProps, TextInput } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 export const TextInputForTableFilter = (props: { label: string; value: string; setValue: (p: string) => void }) => {
   return (
@@ -38,7 +39,6 @@ export const TextInputForTableFilter = (props: { label: string; value: string; s
 
 export const MultiSelectForTableFilter = (props: {
   label: string;
-  // options: { value: string; label: string }[];
   options: ComboboxData;
   value: string[];
   setValue: (p: string[]) => void;
@@ -52,6 +52,7 @@ export const MultiSelectForTableFilter = (props: {
       onChange={(value: string[]) => props.setValue(value)}
       leftSection={<IconSearch size={16} />}
       clearable
+      clearButtonProps={{ tabIndex: 0 }}
       searchable
     />
   );
@@ -63,34 +64,52 @@ export const NumberRangeForTableFilter = (props: {
   values: NumberRange;
   setValues: Dispatch<SetStateAction<NumberRange>>;
 }) => {
+  const t = useTranslations();
   const { values, setValues } = props;
+  const MAX_NUMBER_DISPLAY_INPUT_CONTROL = Number.MAX_SAFE_INTEGER - 1;
   const FROM = 0;
   const TO = 1;
+
+  const commonProps: NumberInputProps = {
+    allowDecimal: false,
+    allowNegative: false,
+    // prevent user from entering a number that is converted to string type by NumberInput
+    isAllowed: ({ value: val }) => Number(val) <= MAX_NUMBER_DISPLAY_INPUT_CONTROL || val === '',
+  };
+
+  // A value of NumberInput take string in some cases. See the details: https://mantine.dev/core/number-input/#value-type
   return (
     <Group>
       <NumberInput
-        label='From'
-        allowNegative={false}
-        allowDecimal={false}
-        value={values[FROM]}
+        label={t('From')}
+        placeholder={t('From')}
+        value={values[FROM] ?? ''}
         onChange={(val) => {
-          if (typeof val === 'string') {
+          if (val === '') {
             setValues((prev) => [undefined, prev[TO]]);
+          } else if (Number(val) === 0) {
+            setValues((prev) => [0, prev[TO]]);
+            // @ts-ignore: val must be number here because of isAllowed function
           } else setValues((prev) => [val, prev[TO]]);
         }}
-        max={values[TO]}
+        max={values[TO] ?? MAX_NUMBER_DISPLAY_INPUT_CONTROL}
+        {...commonProps}
       />
       <NumberInput
-        label='To'
-        allowNegative={false}
-        allowDecimal={false}
-        value={values[TO]}
+        label={t('To')}
+        placeholder={t('To')}
+        value={values[TO] ?? ''}
         onChange={(val) => {
-          if (typeof val === 'string') {
+          if (val === '') {
             setValues((prev) => [prev[FROM], undefined]);
+          } else if (Number(val) === 0) {
+            setValues((prev) => [prev[FROM], 0]);
+            // @ts-ignore: val must be number here because of isAllowed function
           } else setValues((prev) => [prev[FROM], val]);
         }}
         min={values[FROM]}
+        max={MAX_NUMBER_DISPLAY_INPUT_CONTROL}
+        {...commonProps}
       />
     </Group>
   );

@@ -1,3 +1,5 @@
+import { stateOrder } from '@/shared-modules/constant';
+
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,16 +17,4 @@
  */
 
 /** Type definition for device state */
-export type APIDeviceState =
-  | 'Enabled'
-  | 'Disabled'
-  | 'StandbyOffline'
-  | 'StandbySpare'
-  | 'InTest'
-  | 'Starting'
-  | 'Absent'
-  | 'UnavailableOffline'
-  | 'Deferring'
-  | 'Quiesced'
-  | 'Updating'
-  | 'Qualified';
+export type APIDeviceState = (typeof stateOrder)[number];

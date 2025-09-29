@@ -194,6 +194,7 @@ const resData: APIresources = {
         type: 'CPU',
       },
       resourceGroupIDs: [],
+      detected: true,
       nodeIDs: [],
     },
     {
@@ -217,6 +218,7 @@ const resData: APIresources = {
         type: 'CPU',
       },
       resourceGroupIDs: [],
+      detected: true,
       nodeIDs: ['node0001'],
     },
     {
@@ -248,6 +250,7 @@ const resData: APIresources = {
         type: 'CPU',
       },
       resourceGroupIDs: [],
+      detected: true,
       nodeIDs: [],
     },
     {
@@ -265,6 +268,7 @@ const resData: APIresources = {
         type: 'CPU',
       },
       resourceGroupIDs: [],
+      detected: true,
       nodeIDs: [],
     },
     {
@@ -282,6 +286,7 @@ const resData: APIresources = {
         type: 'Accelerator',
       },
       resourceGroupIDs: [],
+      detected: true,
       nodeIDs: ['node001'],
     },
   ],

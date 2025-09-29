@@ -19,12 +19,13 @@ import { useLocaleDateString } from '@/shared-modules/utils/hooks';
 /**
  * Returns a formatted string representation of a date.
  *
- * @param date - The date to format.
+ * @param props - The props containing the date to format.
  * @returns The formatted date string wrapped in a <time> element.
  */
-export const DatetimeString = (date: Date | undefined) => {
-  const dateString = useLocaleDateString(date);
-  if (date)
+export const DatetimeString = (props: { date?: Date }) => {
+  const dateString = useLocaleDateString(props.date);
+
+  if (props.date instanceof Date) {
     return (
       // Due to Next.js specifications, using the Date constructor during rendering
       // causes differences between server-side rendering and client-side rendering, resulting in errors
@@ -32,5 +33,6 @@ export const DatetimeString = (date: Date | undefined) => {
       // Reference: https://nextjs.org/docs/messages/react-hydration-error
       <time suppressHydrationWarning>{dateString}</time>
     );
-  else return <></>;
+  }
+  return <></>;
 };
