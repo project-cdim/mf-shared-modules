@@ -1,5 +1,3 @@
-import { healthOrder } from '@/shared-modules/constant';
-
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,6 +13,8 @@ import { healthOrder } from '@/shared-modules/constant';
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import { healthOrder } from '@/shared-modules/constant';
 
 /** Type definition for health status */
 export type APIDeviceHealth = (typeof healthOrder)[number];

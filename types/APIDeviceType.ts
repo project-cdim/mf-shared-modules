@@ -1,5 +1,3 @@
-import { processorTypeOrder, deviceTypeOrder } from '@/shared-modules/constant';
-
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,6 +13,8 @@ import { processorTypeOrder, deviceTypeOrder } from '@/shared-modules/constant';
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import { processorTypeOrder, deviceTypeOrder } from '@/shared-modules/constant';
 
 /** Processor type definition */
 export type APIProcessorType = (typeof processorTypeOrder)[number];

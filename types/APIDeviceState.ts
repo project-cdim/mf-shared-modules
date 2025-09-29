@@ -1,5 +1,3 @@
-import { stateOrder } from '@/shared-modules/constant';
-
 /*
  * Copyright 2025 NEC Corporation.
  *
@@ -15,6 +13,8 @@ import { stateOrder } from '@/shared-modules/constant';
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import { stateOrder } from '@/shared-modules/constant';
 
 /** Type definition for device state */
 export type APIDeviceState = (typeof stateOrder)[number];
